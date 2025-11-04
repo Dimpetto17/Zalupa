@@ -1,14 +1,14 @@
-let posts = []; // временное хранилище постов
+let posts = [];
 
-export default async function handler(req,res){
-  if(req.method === 'GET'){
+export default function handler(req, res) {
+  if (req.method === 'GET') {
     res.status(200).json(posts.reverse());
-  } else if(req.method === 'POST'){
-    const { author, text } = await req.json();
-    if(!author || !text) return res.status(400).json({error:'Заполните поля'});
+  } else if (req.method === 'POST') {
+    const { author, text } = req.body || {};
+    if (!author || !text) return res.status(400).json({ error: 'Заполните поля' });
     posts.push({ author, text, created_at: new Date().toISOString() });
-    res.status(200).json({message:'Пост создан'});
+    res.status(200).json({ message: 'Пост создан' });
   } else {
-    res.status(405).json({error:'Метод не разрешён'});
+    res.status(405).json({ error: 'Метод не разрешён' });
   }
 }
